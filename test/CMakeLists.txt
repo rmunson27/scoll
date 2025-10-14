@@ -17,6 +17,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(s_coll.test
+    src/p_array_test.cpp
 )
 target_link_libraries(s_coll.test
     GTest::gtest_main
