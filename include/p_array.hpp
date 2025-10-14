@@ -28,6 +28,9 @@ namespace s_coll
         /// @brief The type of the pointer stored.
         using pointer = T*;
 
+        /// @brief The type of pointer stored as `const`.
+        using const_pointer = const T*;
+
         /// @brief The type of references to array elements.
         using reference = T&;
 
@@ -59,6 +62,7 @@ namespace s_coll
 
         /// @brief Decay constructor. Constructs an array from the specified C++ standard library array.
         ///        No bounds checking is performed.
+        /// @tparam U Used to deduce that `T` is a `const` type.
         /// @param arr 
         template <typename U, size_t Size>
         constexpr p_array(const cpp_array<U, Size>& arr) noexcept
@@ -111,6 +115,9 @@ namespace s_coll
 
         /// @brief Decay conversion to the underlying pointer.
         constexpr operator pointer() noexcept { return ptr; }
+
+        /// @brief Decay conversion to the underlying pointer as `const`.
+        constexpr operator const_pointer() const noexcept { return ptr; }
     };
 }
 
