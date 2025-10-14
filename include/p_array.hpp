@@ -35,48 +35,33 @@ namespace s_coll
         /// @brief Constructs a default array, with a null pointer and zero length.
         constexpr p_array() noexcept : ptr(nullptr), len(0) { }
 
-        /// @brief Constructs an array from the specified pointer and length, allowing for conversion of pointer types.
-        ///        No checking is performed.
-        /// @tparam U 
+        /// @brief Constructs an array from the specified pointer and length. No bounds checking is performed.
         /// @param ptr 
         /// @param len
-        template <typename U>
-        constexpr p_array(U * const ptr, size_t len) noexcept
-        requires std::convertible_to<U*, T*>
+        constexpr p_array(T * const ptr, size_t len) noexcept
         : ptr(ptr), len(len) { }
 
-        /// @brief Decay constructor. Constructs an array from the specified C-style array, allowing for conversion
-        ///        of pointer types. No checking is performed.
-        /// @tparam U 
+        /// @brief Decay constructor. Constructs an array from the specified C-style array.
+        ///        No bounds checking is performed.
         /// @param arr 
-        template <typename U, size_t Size>
-        constexpr p_array(c_array<U, Size>& arr) noexcept
-        requires std::convertible_to<U*, T*>
+        template <size_t Size>
+        constexpr p_array(c_array<T, Size>& arr) noexcept
         : ptr(arr), len(Size) { }
 
-        /// @brief Decay constructor. Constructs an array from the specified C++ standard library array, allowing
-        ///        for conversion of pointer types. No checking is performed.
-        /// @tparam U 
+        /// @brief Decay constructor. Constructs an array from the specified C++ standard library array.
+        ///        No bounds checking is performed.
         /// @param arr 
-        template <typename U, size_t Size>
-        constexpr p_array(cpp_array<U, Size>& arr) noexcept
-        requires std::convertible_to<U*, T*>
+        template <size_t Size>
+        constexpr p_array(cpp_array<T, Size>& arr) noexcept
         : ptr(arr.data()), len(Size) { }
 
-        /// @brief Decay constructor. Constructs an array from the specified C++ standard library array, allowing
-        ///        for conversion of pointer types. No checking is performed.
-        /// @tparam U 
+        /// @brief Decay constructor. Constructs an array from the specified C++ standard library array.
+        ///        No bounds checking is performed.
         /// @param arr 
         template <typename U, size_t Size>
         constexpr p_array(const cpp_array<U, Size>& arr) noexcept
-        requires std::convertible_to<const U*, T*>
+        requires std::same_as<T, std::add_const_t<U>>
         : ptr(arr.data()), len(Size) { }
-
-        /// @brief Converts a `p_array` of a derived type to a `p_array` of this type.
-        template <typename U>
-        constexpr p_array(const p_array<U>& other) noexcept
-        requires std::convertible_to<U*, T*>
-        : ptr(other.ptr), len(other.len) { }
 
         /// @brief Accesses an element of the array. 
         /// @brief Accesses an array element at the specified index. No bounds checking is performed.

@@ -1,22 +1,14 @@
 #include "p_array_test.hpp"
-#include "gtest/gtest.h"
 
 using namespace s_coll;
-using namespace s_coll::test::helpers;
 
-static constexpr Base base_c_arr[] = { { 1 }, { 4 }, { 5 }, { 8 }, { 9 } };
-static constexpr size_t base_arr_size = sizeof(base_c_arr) / sizeof(Base);
-static constexpr auto base_cpp_arr = std::array<Base, base_arr_size>({ Base(1), { 2 }, { 3 }, { 4 }, { 5 } });
-
-static constexpr Derived derv_c_arr[] = { { 1, 'a' }, { 3, 'c' }, { 5, 'e' }, { 7, 'g' } };
-static constexpr size_t derv_arr_size = sizeof(derv_c_arr) / sizeof(Derived);
-static constexpr auto derv_cpp_arr = std::array<Derived, derv_arr_size>({
-    Derived(1, 'a'), { 3, 'c' }, { 5, 'e' }, { 7, 'g' }
-});
+static constexpr int int_c_arr[] { 1, 3, 5, 7, 9 };
+static constexpr size_t int_arr_size = sizeof(int_c_arr) / sizeof(int);
+static constexpr std::array<int, int_arr_size> int_cpp_arr = { 1, 3, 5, 7, 9 };
 
 TEST(PArrayTest, TestDefaultConstruction)
 {
-    auto parr = p_array<const Base>();
+    auto parr = p_array<int>();
     EXPECT_EQ(nullptr, parr.ptr) << "Pointer should be null for default-constructed p_array.";
     EXPECT_EQ(0, parr.len) << "Length should be zero for default-constructed p_array.";
 }
@@ -24,59 +16,40 @@ TEST(PArrayTest, TestDefaultConstruction)
 TEST(PArrayTest, TestPointerConstruction)
 {
     // Partial array
-    p_array<const Base> parr = { base_c_arr, 3 };
-    EXPECT_EQ(base_c_arr, parr.ptr) << "Pointer of p_array should match the provided base array.";
+    p_array<const int> parr = { int_c_arr, 3 };
+    EXPECT_EQ(int_c_arr, parr.ptr) << "Pointer of p_array should match the provided array.";
     EXPECT_EQ(3, parr.len) << "Length of p_array should match the provided length.";
 
     // Full array
-    parr = { base_c_arr, 5 };
-    EXPECT_EQ(base_c_arr, parr.ptr) << "Pointer of p_array should match the provided base array.";
+    parr = { int_c_arr, 5 };
+    EXPECT_EQ(int_c_arr, parr.ptr) << "Pointer of p_array should match the provided array.";
     EXPECT_EQ(5, parr.len) << "Length of p_array should match the provided length.";
-
-    // Derived array
-    parr = { derv_c_arr, 2 };
-    EXPECT_EQ(derv_c_arr, parr.ptr) << "Pointer of p_array should match the provided derived array.";
-    EXPECT_EQ(2, parr.len) << "Length of p_array should match the provided length.";
 }
 
 TEST(PArrayTest, TestConversion)
 {
-    p_array<const Base> base_parr = base_c_arr;
-    EXPECT_EQ(base_c_arr, base_parr.ptr) << "Pointer of p_array should match the provided base array.";
-    EXPECT_EQ(base_arr_size, base_parr.len) << "Length of p_array should match the size of the provided base array.";
-
     // Test C-style arrays
-    base_parr = derv_c_arr;
-    EXPECT_EQ(derv_c_arr, base_parr.ptr) << "Pointer of p_array should match the provided derived array.";
-    EXPECT_EQ(derv_arr_size, base_parr.len) << "Length of p_array should match the size of the provided derived array.";
+    p_array<const int> int_parr = int_c_arr;
+    EXPECT_EQ(int_c_arr, int_parr.ptr) << "Pointer of p_array should match the provided array.";
+    EXPECT_EQ(int_arr_size, int_parr.len) << "Length of p_array should match the size of the provided array.";
 
-    base_parr = base_c_arr;
-    p_array<const Derived> other_parr = derv_c_arr;
-    base_parr = other_parr;
-    EXPECT_EQ(derv_c_arr, base_parr.ptr) << "Pointer of p_array should match the provided derived array.";
-    EXPECT_EQ(derv_arr_size, base_parr.len) << "Length of p_array should match the size of the provided derived array.";
-
-    // Test C++ arrays
-    base_parr = base_cpp_arr;
-    EXPECT_EQ(base_cpp_arr.data(), base_parr.ptr) << "Pointer of p_array should match the provided base C++ array.";
-    EXPECT_EQ(base_arr_size, base_parr.len) << "Length of p_array should match the size of the provided base C++ array.";
-
-    base_parr = derv_cpp_arr;
-    EXPECT_EQ(derv_cpp_arr.data(), base_parr.ptr) << "Pointer of p_array should match the provided derived C++ array.";
-    EXPECT_EQ(derv_arr_size, base_parr.len) << "Length of p_array should match the size of the provided derived C++ array.";
+    // Test C++ standard library arrays
+    int_parr = int_cpp_arr;
+    EXPECT_EQ(int_cpp_arr.data(), int_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
+    EXPECT_EQ(int_arr_size, int_parr.len) << "Length of p_array should match the size of the provided C++ array.";
 
     // Test non-const C++ arrays
-    std::array<Base, base_arr_size> bs = base_cpp_arr;
-    p_array<Base> non_const_base_parr = bs;
-    EXPECT_EQ(bs.data(), non_const_base_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
-    EXPECT_EQ(bs.size(), non_const_base_parr.len) << "Length of p_array should match the size of the provided C++ array.";
+    std::array<int, int_arr_size> bs = int_cpp_arr;
+    p_array<int> non_const_int_parr = bs;
+    EXPECT_EQ(bs.data(), non_const_int_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
+    EXPECT_EQ(bs.size(), non_const_int_parr.len) << "Length of p_array should match the size of the provided C++ array.";
 
     // Test decay to a pointer
-    Base * non_const_base_ptr = non_const_base_parr;
-    EXPECT_EQ(non_const_base_parr.ptr, non_const_base_ptr) << "A non-const p_array should decay to its non-const pointer.";
+    int * non_const_int_ptr = non_const_int_parr;
+    EXPECT_EQ(non_const_int_parr.ptr, non_const_int_ptr) << "A non-const p_array should decay to its non-const pointer.";
 
-    const Base * const_base_ptr = base_parr;
-    EXPECT_EQ(base_parr.ptr, const_base_ptr) << "A const p_array should decay to its const pointer.";
+    const int * const_base_ptr = int_parr;
+    EXPECT_EQ(int_parr.ptr, const_base_ptr) << "A const p_array should decay to its const pointer.";
 }
 
 TEST(PArrayTest, TestEquality)
@@ -110,57 +83,41 @@ TEST(PArrayTest, TestSize)
 
 TEST(PArrayTest, TestIndexing)
 {
-    std::array<Derived, derv_arr_size> derv = derv_cpp_arr;
-    p_array<Base> base_parr = derv;
-    p_array<Derived> derv_parr = derv;
+    std::array<int, int_arr_size> ints = int_cpp_arr;
+    p_array<int> int_parr = ints;
 
-    // Check getting indexes of base array
-    for (int i = 0; i < base_parr.len; i++)
+    // Check getting indexes of the p_array
+    for (int i = 0; i < int_parr.len; i++)
     {
-        EXPECT_EQ(Base(1 + 2 * i), base_parr[i]) << "Element at base p_array index " << i << " was not as expected.";
+        EXPECT_EQ(1 + 2 * i, int_parr[i]) << "Element at p_array index " << i << " was not as expected.";
     }
 
-    // Check getting indexes of derived array
-    for (int i = 0; i < derv_parr.len; i++)
+    // Check setting indexes of the p_array
+    for (int i = 0; i < int_parr.len; i++)
     {
-        EXPECT_EQ(Derived(1 + 2 * i, char('a' + 2 * i)), derv_parr[i])
-            << "Element at derived p_array index " << i << " was not as expected.";
-    }
-
-    // Check setting indexes of derived array
-    for (int i = 0; i < derv_parr.len; i++)
-    {
-        derv_parr[i] = { 3 * i + 2, char(i + 1) };
-        EXPECT_EQ(Derived(3 * i + 2, char(i + 1)), derv_parr[i]);
+        int_parr[i] = 3 * i + 2;
+        EXPECT_EQ(3 * i + 2, int_parr[i]) << "Element at p_array index " << i << " was not set properly.";
     }
 }
 
 TEST(PArrayTest, TestIteration)
 {
-    std::array<Derived, derv_arr_size> derv = derv_cpp_arr;
-    p_array<Base> base_parr = derv;
-    p_array<Derived> derv_parr = derv;
+    std::array<int, int_arr_size> ints = int_cpp_arr;
+    p_array<int> int_parr = ints;
 
-    // Test getting elements of base p_array
+    // Test getting elements of the p_array
     int i = 0;
-    for (const auto& elt : base_parr)
+    for (const auto& elt : int_parr)
     {
-        EXPECT_EQ(derv[i++], elt) << "Element at index " << i << " of base p_array was not as expected.";
+        EXPECT_EQ(ints[i++], elt) << "Element at index " << i << " of p_array was not as expected.";
     }
 
-    // Test getting elements of derived p_array
+    // Test setting elements of the p_array
     i = 0;
-    for (const auto& elt : derv_parr)
+    for (auto& elt : int_parr)
     {
-        EXPECT_EQ(derv[i++], elt) << "Element at index " << i << " of derived p_array was not as expected.";
-    }
-
-    // Test setting elements of derived p_array
-    i = 0;
-    for (auto& elt : derv_parr)
-    {
-        Derived new_elt = { 2 * (i + 2), char('a' + 3 * i) };
+        int new_elt = 2 * (i + 2);
         elt = new_elt;
-        EXPECT_EQ(new_elt, elt) << "Element at index " << i << " of derived p_array was not set properly.";
+        EXPECT_EQ(new_elt, elt) << "Element at p_array index " << i << " was not set properly.";
     }
 }
