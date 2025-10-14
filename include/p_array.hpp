@@ -8,6 +8,8 @@ namespace s_coll
 {
     /// @brief A simple struct to represent a pointer to an array and its length.
     /// @tparam T The type of the array elements.
+    /// @warning This type can decay to a pointer like a C-style array through an implicit conversion.
+    ///          This may be unsafe.
     template <typename T>
     struct p_array
     {
