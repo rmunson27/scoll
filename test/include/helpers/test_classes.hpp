@@ -1,7 +1,7 @@
-#ifndef ___INCLG__S_COLL_TEST__HELPERS__TEST_CLASSES_HPP___
-#define ___INCLG__S_COLL_TEST__HELPERS__TEST_CLASSES_HPP___
+#ifndef ___INCLG__SCOLL_TEST__HELPERS__TEST_CLASSES_HPP___
+#define ___INCLG__SCOLL_TEST__HELPERS__TEST_CLASSES_HPP___
 
-namespace s_coll::test::helpers
+namespace scoll::test::helpers
 {
     struct Base
     {

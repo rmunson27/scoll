@@ -1,9 +1,9 @@
-#ifndef ___INCLG__S_COLL__BUILTIN_ARRAYS_HPP___
-#define ___INCLG__S_COLL__BUILTIN_ARRAYS_HPP___
+#ifndef ___INCLG__SCOLL__BUILTIN_ARRAYS_HPP___
+#define ___INCLG__SCOLL__BUILTIN_ARRAYS_HPP___
 
 #include <array>
 
-namespace s_coll
+namespace scoll
 {
     /// @brief Aliases the C-style array type.
     /// @tparam T 

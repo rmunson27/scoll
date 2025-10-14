@@ -1,6 +1,6 @@
 #include "p_array_test.hpp"
 
-using namespace s_coll;
+using namespace scoll;
 
 static constexpr int int_c_arr[] { 1, 3, 5, 7, 9 };
 static constexpr size_t int_arr_size = sizeof(int_c_arr) / sizeof(int);

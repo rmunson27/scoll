@@ -1,10 +1,10 @@
-#ifndef ___INCLG__S_COLL__P_ARRAY_HPP___
-#define ___INCLG__S_COLL__P_ARRAY_HPP___
+#ifndef ___INCLG__SCOLL__P_ARRAY_HPP___
+#define ___INCLG__SCOLL__P_ARRAY_HPP___
 
 #include "builtin_arrays.hpp"
 #include <concepts>
 
-namespace s_coll
+namespace scoll
 {
     /// @brief A simple struct to represent a pointer to an array and its length.
     /// @tparam T The type of the array elements.
