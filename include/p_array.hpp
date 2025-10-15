@@ -2,6 +2,7 @@
 #define ___INCLG__SCOLL__P_ARRAY_HPP___
 
 #include "builtin_arrays.hpp"
+#include <stdexcept>
 #include <concepts>
 
 namespace scoll
@@ -84,6 +85,43 @@ namespace scoll
             return *(ptr + i);
         }
 
+        /// @brief Accesses an array element at the specified index with bounds checking.
+        /// @param i 
+        /// @return 
+        /// @throw `std::out_of_range` Thrown if the index is out of range of the collection.
+        constexpr T& at(size_t i)
+        {
+            _check_bounds(i);
+            return this->operator[](i);
+        }
+
+        /// @brief Accesses an array element at the specified index with bounds checking.
+        /// @param i 
+        /// @return 
+        /// @throw `std::out_of_range` Thrown if the index is out of range of the collection.
+        constexpr const T& at(size_t i) const
+        {
+            _check_bounds(i);
+            return this->operator[](i);
+        }
+
+    private:
+        /// @brief Checks an index within the bounds of the collection.
+        /// @param i 
+        /// @throw `std::out_of_range`
+        constexpr void _check_bounds(size_t i) const
+        {
+            if (i < 0)
+            {
+                throw std::out_of_range("Negative value " + std::to_string(i) + " is not a valid index.");
+            }
+            else if (i >= len)
+            {
+                throw std::out_of_range("Value " + std::to_string(i) + " is out of range of the collection.");
+            }
+        }
+
+    public:
         /// @brief Determines if this array is the same as another array.
         /// @param other 
         /// @return 

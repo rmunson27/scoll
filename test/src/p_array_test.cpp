@@ -100,6 +100,30 @@ TEST(PArrayTest, TestIndexing)
     }
 }
 
+TEST(PArrayTest, TestAt)
+{
+    // Create non-const array
+    std::array<int, int_arr_size> ints = int_cpp_arr;
+    p_array<int> int_parr = ints;
+
+    // Check getting indexes of the p_array
+    for (int i = 0; i < int_parr.len; i++)
+    {
+        EXPECT_EQ(1 + 2 * i, int_parr.at(i)) << "Element at p_array index " << i << " was not as expected.";
+    }
+
+    // Check setting indexes of the p_array
+    for (int i = 0; i < int_parr.len; i++)
+    {
+        int_parr[i] = 3 * i + 2;
+        EXPECT_EQ(3 * i + 2, int_parr[i]) << "Element at p_array index " << i << " was not set properly.";
+    }
+
+    // Ensure bounds checking works
+    EXPECT_THROW(int_parr.at(int_parr.len), std::out_of_range)
+        << "Indexing outside the bounds of the array should cause an exception to be thrown.";
+}
+
 TEST(PArrayTest, TestIteration)
 {
     std::array<int, int_arr_size> ints = int_cpp_arr;
