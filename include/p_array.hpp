@@ -69,16 +69,20 @@ namespace scoll
         requires std::same_as<T, std::add_const_t<U>>
         : ptr(arr.data()), len(Size) { }
 
-        /// @brief Accesses an element of the array. 
-        /// @brief Accesses an array element at the specified index. No bounds checking is performed.
+        /// @brief Accesses an array element at the specified index.
+        ///        If the index is out of range, the behavior is undefined.
         /// @param i 
         /// @return 
-        constexpr T& operator[](size_t i) noexcept { return *(ptr + i); }
+        constexpr T& operator[](size_t i) noexcept(noexcept(*(ptr + i))) { return *(ptr + i); }
 
-        /// @brief Accesses an array element at the specified index. No bounds checking is performed.
+        /// @brief Accesses an array element at the specified index.
+        ///        If the index is out of range, the behavior is undefined.
         /// @param i 
         /// @return 
-        constexpr const T& operator[](size_t i) const noexcept { return *(ptr + i); }
+        constexpr const T& operator[](size_t i) const noexcept(noexcept(*(ptr + i)))
+        {
+            return *(ptr + i);
+        }
 
         /// @brief Determines if this array is the same as another array.
         /// @param other 
