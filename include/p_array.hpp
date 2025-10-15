@@ -6,7 +6,7 @@
 
 namespace scoll
 {
-    /// @brief A simple struct to represent a pointer to an array and its length.
+    /// @brief Pointer array. Represents an array as a pointer and a length.
     /// @tparam T The type of the array elements.
     /// @warning This type can decay to a pointer like a C-style array through an implicit conversion.
     ///          This may be unsafe.
