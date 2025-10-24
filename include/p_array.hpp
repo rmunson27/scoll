@@ -122,11 +122,11 @@ namespace scoll
         {
             if (i < 0)
             {
-                throw std::out_of_range("Negative value " + std::to_string(i) + " is not a valid index.");
+                throw std::out_of_range("Negative value " + std::to_string(i) + " is not a valid array index.");
             }
             else if (i >= len)
             {
-                throw std::out_of_range("Value " + std::to_string(i) + " is out of range of the collection.");
+                throw std::out_of_range("Value " + std::to_string(i) + " is out of range of the array.");
             }
         }
 
