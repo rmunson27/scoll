@@ -28,28 +28,54 @@ TEST(PArrayTest, TestPointerConstruction)
 
 TEST(PArrayTest, TestConversion)
 {
-    // Test C-style arrays
-    p_array<const int> int_parr = int_c_arr;
-    EXPECT_EQ(int_c_arr, int_parr.ptr) << "Pointer of p_array should match the provided array.";
-    EXPECT_EQ(int_arr_size, int_parr.len) << "Length of p_array should match the size of the provided array.";
+    // Test const C-style arrays
+    p_array<const int> const_int_parr = int_c_arr;
+    EXPECT_EQ(int_c_arr, const_int_parr.ptr) << "Pointer of p_array should match the provided array.";
+    EXPECT_EQ(int_arr_size, const_int_parr.len) << "Length of p_array should match the size of the provided array.";
 
-    // Test C++ standard library arrays
-    int_parr = int_cpp_arr;
-    EXPECT_EQ(int_cpp_arr.data(), int_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
-    EXPECT_EQ(int_arr_size, int_parr.len) << "Length of p_array should match the size of the provided C++ array.";
+    // Test non-const C-style arrays
+    int c_arr[int_arr_size];
+    std::copy(int_c_arr, int_c_arr + int_arr_size, c_arr);
+    p_array<int> int_parr = c_arr;
+    EXPECT_EQ(c_arr, int_parr.ptr);
+    EXPECT_EQ(int_arr_size, int_parr.len);
 
-    // Test non-const C++ arrays
+    // Test const C++ standard library arrays
+    const_int_parr = int_cpp_arr;
+    EXPECT_EQ(int_cpp_arr.data(), const_int_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
+    EXPECT_EQ(int_arr_size, const_int_parr.len) << "Length of p_array should match the size of the provided C++ array.";
+
+    // Test non-const C++ standard library arrays
     std::array<int, int_arr_size> bs = int_cpp_arr;
     p_array<int> non_const_int_parr = bs;
     EXPECT_EQ(bs.data(), non_const_int_parr.ptr) << "Pointer of p_array should match the provided C++ array.";
     EXPECT_EQ(bs.size(), non_const_int_parr.len) << "Length of p_array should match the size of the provided C++ array.";
 
-    // Test decay to a pointer
+    // Test const decay to a pointer
+    const int * const_base_ptr = const_int_parr;
+    EXPECT_EQ(const_int_parr.ptr, const_base_ptr) << "A const p_array should decay to its const pointer.";
+
+    // Test non-const decay to a pointer
     int * non_const_int_ptr = non_const_int_parr;
     EXPECT_EQ(non_const_int_parr.ptr, non_const_int_ptr) << "A non-const p_array should decay to its non-const pointer.";
+}
 
-    const int * const_base_ptr = int_parr;
-    EXPECT_EQ(int_parr.ptr, const_base_ptr) << "A const p_array should decay to its const pointer.";
+TEST(PArrayTest, TestMake)
+{
+    int c_arr[int_arr_size];
+    std::copy(int_c_arr, int_c_arr + int_arr_size, c_arr);
+    auto c_parr = p_arrays::make(c_arr);
+    EXPECT_EQ(c_arr, c_parr.ptr) << "Pointer of constructed p_array was not as expected.";
+
+    auto const_c_parr = p_arrays::make(int_c_arr);
+    EXPECT_EQ(int_c_arr, const_c_parr.ptr) << "Pointer of constructed p_array was not as expected.";
+
+    auto cpp_arr = int_cpp_arr;
+    auto cpp_parr = p_arrays::make(cpp_arr);
+    EXPECT_EQ(cpp_arr.data(), cpp_parr.ptr) << "Pointer of constructed p_array was not as expected.";
+
+    auto cpp_const_parr = p_arrays::make(int_cpp_arr);
+    EXPECT_EQ(int_cpp_arr.data(), cpp_const_parr.ptr) << "Pointer of constructed p_array was not as expected.";
 }
 
 TEST(PArrayTest, TestEquality)

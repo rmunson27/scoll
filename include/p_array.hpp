@@ -56,6 +56,15 @@ namespace scoll
 
         /// @brief Decay constructor. Constructs an array from the specified C++ standard library array.
         ///        No bounds checking is performed.
+        /// @tparam U Used to deduce that `T` is a `const` type.
+        /// @param arr 
+        template <typename U, size_t Size>
+        constexpr p_array(const c_array<U, Size>& arr) noexcept
+        requires std::same_as<T, std::add_const_t<U>>
+        : ptr(arr), len(Size) { }
+
+        /// @brief Decay constructor. Constructs an array from the specified C++ standard library array.
+        ///        No bounds checking is performed.
         /// @param arr 
         template <size_t Size>
         constexpr p_array(cpp_array<T, Size>& arr) noexcept
@@ -161,6 +170,58 @@ namespace scoll
         /// @brief Decay conversion to the underlying pointer as `const`.
         constexpr operator const_pointer() const noexcept { return ptr; }
     };
+    
+    /// @brief Contains additional generic methods for constructing `r_array` objects.
+    namespace p_arrays
+    {
+        /// @brief Creates a `p_array` from the given C-style array.
+        /// @tparam T 
+        /// @tparam Size 
+        /// @param arr 
+        /// @return 
+        template <typename T, size_t Size>
+        p_array<T> make(c_array<T, Size>& arr) noexcept
+        {
+            return { arr };
+        }
+
+        /// @brief Creates a `p_array` from the given `const` C-style array.
+        /// @remark This function can be used to deduce the type arguments and length, which cannot be done when using
+        ///         the constructor.
+        /// @tparam T 
+        /// @tparam Size 
+        /// @param arr 
+        /// @return 
+        template <typename T, size_t Size>
+        p_array<const T> make(const c_array<T, Size>& arr) noexcept
+        {
+            return { arr };
+        }
+
+        /// @brief Creates a `p_array` from the given C++ standard library array.
+        /// @tparam T 
+        /// @tparam Size 
+        /// @param arr 
+        /// @return 
+        template <typename T, size_t Size>
+        p_array<T> make(std::array<T, Size>& arr) noexcept
+        {
+            return { arr };
+        }
+
+        /// @brief Creates a `p_array` from the given `const` C++ standard library array.
+        /// @remark This function can be used to deduce the type arguments and length, which cannot be done when using
+        ///         the constructor.
+        /// @tparam T 
+        /// @tparam Size 
+        /// @param arr 
+        /// @return 
+        template <typename T, size_t Size>
+        p_array<const T> make(const std::array<T, Size>& arr) noexcept
+        {
+            return { arr };
+        }
+    }
 }
 
 #endif
