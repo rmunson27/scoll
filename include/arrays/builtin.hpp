@@ -1,5 +1,5 @@
-#ifndef ___INCLG__SCOLL__BUILTIN_ARRAYS_HPP___
-#define ___INCLG__SCOLL__BUILTIN_ARRAYS_HPP___
+#ifndef ___INCLG__SCOLL__ARRAYS__BUILTIN_HPP___
+#define ___INCLG__SCOLL__ARRAYS__BUILTIN_HPP___
 
 #include <array>
 

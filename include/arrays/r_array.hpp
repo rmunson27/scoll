@@ -1,5 +1,5 @@
-#ifndef ___INCLG__SCOLL__R_ARRAY_HPP___
-#define ___INCLG__SCOLL__R_ARRAY_HPP___
+#ifndef ___INCLG__SCOLL__ARRAYS__R_ARRAY_HPP___
+#define ___INCLG__SCOLL__ARRAYS__R_ARRAY_HPP___
 
 #include <algorithm>
 #include "p_array.hpp"

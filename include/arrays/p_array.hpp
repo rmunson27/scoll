@@ -1,9 +1,9 @@
-#ifndef ___INCLG__SCOLL__P_ARRAY_HPP___
-#define ___INCLG__SCOLL__P_ARRAY_HPP___
+#ifndef ___INCLG__SCOLL__ARRAYS__P_ARRAY_HPP___
+#define ___INCLG__SCOLL__ARRAYS__P_ARRAY_HPP___
 
-#include "builtin_arrays.hpp"
-#include <stdexcept>
+#include "builtin.hpp"
 #include <concepts>
+#include <stdexcept>
 
 namespace scoll
 {

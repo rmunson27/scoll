@@ -1,4 +1,4 @@
-#include "p_array_test.hpp"
+#include "arrays/p_array_test.hpp"
 
 using namespace scoll;
 
